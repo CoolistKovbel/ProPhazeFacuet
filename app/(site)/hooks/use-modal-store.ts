@@ -1,7 +1,7 @@
 
 import { create } from "zustand";
 
-export type ModalType = ""
+export type ModalType = "addToken"
 
 interface ModalData {
   channel?: any;

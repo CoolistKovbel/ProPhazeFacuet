@@ -1,14 +1,16 @@
 "use client";
 
 import React, { useState } from "react";
-import { useModal } from "@/app/hooks/use-modal-store";
+
 import { useRouter } from "next/navigation";
 import { ethers } from "ethers";
+import { useModal } from "../hooks/use-modal-store";
 
 
-const CreateNFTListingtsxModel = () => {
+const AddTokenxModel = () => {
   const { isOpen, onClose, type } = useModal();
-  const isModalOpen = isOpen && type === "CreateNFTListingtsxModel";
+  
+  const isModalOpen = isOpen && type === "addToken";
 
   const router = useRouter();
   const [deFile, setFile] = useState<File | null>(null);
@@ -50,36 +52,30 @@ const CreateNFTListingtsxModel = () => {
         isModalOpen ? "block" : "hidden"
       }`}
     >
+
       <div
         className="fixed inset-0 bg-black opacity-50"
         onClick={onClose}
       ></div>
+
       <dialog
         open={isModalOpen}
         className="relative bg-white p-6 rounded-lg shadow-lg w-full max-w-md"
       >
         <form onSubmit={onSubmit}>
           <h2 className="text-2xl font-bold mb-4">Create NFT Listing</h2>
+
           <label className="block mb-2">
             Name:
             <input
               type="text"
               name="name"
-              id="name"
+              id=" name"
               required
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
           </label>
-          <label className="block mb-2">
-            Contract ABI:
-            <input
-              type="text"
-              name="contractABI"
-              id="contractABI"
-              required
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-            />
-          </label>
+
           <label className="block mb-2">
             Description:
             <input
@@ -100,16 +96,7 @@ const CreateNFTListingtsxModel = () => {
               className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
             />
           </label>
-          <label className="block mb-2">
-            Cost:
-            <input
-              type="amount"
-              name="cost"
-              id="cost"
-              required
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-            />
-          </label>
+          
           <label className="block mb-4">
             Fan,Community, Default banner:
             <input
@@ -136,9 +123,11 @@ const CreateNFTListingtsxModel = () => {
             </button>
           </div>
         </form>
+
       </dialog>
+
     </div>
   );
 };
 
-export default CreateNFTListingtsxModel;
+export default AddTokenxModel;

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import AddTokenxModel from "../models/addToken";
 
 
 export const  ModalProvider = () => {
@@ -16,7 +17,7 @@ export const  ModalProvider = () => {
 
   return (
     <>
-      
+      <AddTokenxModel />
     </>
   );
 };

@@ -4,6 +4,7 @@ import "./globals.css";
 import { inter } from "./components/ui/fonts";
 import MainHeader from "./components/main-header";
 import MainFooter from "./components/mainFooter";
+import { ModalProvider } from "./(site)/providers/model-provider";
 
 export const metadata: Metadata = {
   title: "ProPhazeFacuet",
@@ -19,10 +20,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-      <MainHeader />
+        <MainHeader />
         {children}
         <MainFooter />
-        </body>
+        <ModalProvider />
+      </body>
     </html>
   );
 }
