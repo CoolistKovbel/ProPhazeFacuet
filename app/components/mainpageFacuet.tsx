@@ -95,6 +95,7 @@ export default function Home() {
           <Link href="/list" className="bg-[#222] p-4 rounded-lg font-bold w-full text-center">View more</Link>
         </header>
 
+
         <div className='bg-[#222] mt-4 rounded-lg drop-shadow-lg '>
 
           {/* Fucet timer */}
@@ -113,6 +114,8 @@ export default function Home() {
 
 
         </div>
+
+
 
       </article>
 
