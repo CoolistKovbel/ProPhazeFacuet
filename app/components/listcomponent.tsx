@@ -1,5 +1,5 @@
 "use client";
-import { useModal } from "../(site)/hooks/use-modal-store";
+import { useModal } from "../hooks/use-modal-store";
 
 const ListComponent = () => {
   const { onOpen } = useModal();
@@ -30,7 +30,7 @@ const ListComponent = () => {
         </button>
 
         <form>
-          <input type="text" placeholder="search" />
+          <input type="text" placeholder="search" className="p-4 bg-[#222] font-bold" />
         </form>
 
         <button

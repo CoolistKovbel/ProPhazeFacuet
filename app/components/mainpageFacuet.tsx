@@ -84,8 +84,6 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center p-4">
 
-     
-
       <article className="p-4">
 
         <header className="flex items-start gap-2 flex-col bg-[#444] p-4 rounded-lg">
@@ -94,7 +92,7 @@ export default function Home() {
             There are plenty of them around here, popular and common, get them
             before they run out and join the community to refuel.
           </p>
-          <Link href="/" className="bg-[#222] p-4 rounded-lg font-bold w-full text-center">View more</Link>
+          <Link href="/list" className="bg-[#222] p-4 rounded-lg font-bold w-full text-center">View more</Link>
         </header>
 
         <div className='bg-[#222] mt-4 rounded-lg drop-shadow-lg '>

@@ -4,7 +4,7 @@ import "./globals.css";
 import { inter } from "./components/ui/fonts";
 import MainHeader from "./components/main-header";
 import MainFooter from "./components/mainFooter";
-import { ModalProvider } from "./(site)/providers/model-provider";
+import { ModalProvider } from "./providers/model-provider";
 
 export const metadata: Metadata = {
   title: "ProPhazeFacuet",
