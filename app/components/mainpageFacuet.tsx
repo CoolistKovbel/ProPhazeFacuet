@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { fetchTimerState, saveTimerState } from '../lib/action';
-import MainHeader from './main-header';
-
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { fetchTimerState, saveTimerState } from "../lib/action";
+import MainHeader from "./main-header";
+import { approvePhazeTokenTransfer } from "../lib/web3";
 
 interface TimerState {
   timeLeft: number;
@@ -14,11 +14,40 @@ interface TimerState {
 }
 
 export default function Home() {
-
   const [timeLeft, setTimeLeft] = useState(14400); // 4 hours in seconds
   const [laps, setLaps] = useState(0);
   const [reward, setReward] = useState(1); // initial reward
   const maxLaps = 9;
+  const faucetContract = "0x";
+
+  const handleDeposit = async (e: any) => {
+    e.preventDefault();
+
+    try {
+      const userChecked = e.target.userAddress.checked;
+      const contractChecked = e.target.contractAddress.checked;
+
+      if (userChecked) {
+        console.log("User checkbox checked");
+        const gg = await approvePhazeTokenTransfer(
+          e.target.depositAmount.value,
+          undefined
+        );
+      }
+
+      if (contractChecked) {
+        console.log("Contract checkbox checked");
+        const gg = await approvePhazeTokenTransfer(
+          e.target.depositAmount.value,
+          faucetContract
+        );
+      }
+
+      return "no options";
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     const fetchTimer = async () => {
@@ -33,7 +62,7 @@ export default function Home() {
         const newLaps = Math.min(data.laps + elapsedLaps + 1, maxLaps);
         const newReward = Math.pow(2, newLaps) * data.reward;
 
-        setTimeLeft(14400 - Math.abs(remainingTime) % 14400);
+        setTimeLeft(14400 - (Math.abs(remainingTime) % 14400));
         setLaps(newLaps);
         setReward(newReward);
       }
@@ -43,7 +72,7 @@ export default function Home() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTimeLeft(prev => {
+      setTimeLeft((prev) => {
         const newTime = prev > 0 ? prev - 1 : 0;
         saveTimerState(newTime, laps, reward);
         return newTime;
@@ -51,13 +80,13 @@ export default function Home() {
     }, 1000);
 
     if (timeLeft === 0 && laps < maxLaps) {
-      setLaps(prev => {
+      setLaps((prev) => {
         const newLaps = prev + 1;
         saveTimerState(14400, newLaps, reward * 2);
         return newLaps;
       });
       setTimeLeft(14400); // Reset timer to 4 hours
-      setReward(prev => prev * 2);
+      setReward((prev) => prev * 2);
     } else if (laps >= maxLaps) {
       clearInterval(interval); // Stop timer after 9 laps
     }
@@ -78,47 +107,90 @@ export default function Home() {
     const h = Math.floor(seconds / 3600);
     const m = Math.floor((seconds % 3600) / 60);
     const s = seconds % 60;
-    return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-  };              
+    return `${h.toString().padStart(2, "0")}:${m
+      .toString()
+      .padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+  };
 
   return (
     <main className="flex min-h-screen flex-col items-center p-4">
-
       <article className="p-4">
-
         <header className="flex items-start gap-2 flex-col bg-[#444] p-4 rounded-lg">
-          <h2 className="text-2xl font-bold uppercase">Need some extra tokens</h2>
+          <h2 className="text-2xl font-bold uppercase">
+            Need some extra tokens
+          </h2>
           <p className="text-sm">
             There are plenty of them around here, popular and common, get them
             before they run out and join the community to refuel.
           </p>
-          <Link href="/list" className="bg-[#222] p-4 rounded-lg font-bold w-full text-center">View more</Link>
+          <Link
+            href="/list"
+            className="bg-[#222] p-4 rounded-lg font-bold w-full text-center"
+          >
+            View more
+          </Link>
         </header>
 
-
-        <div className='bg-[#222] mt-4 rounded-lg drop-shadow-lg '>
-
+        <div className="bg-[#222] mt-4 rounded-lg drop-shadow-lg ">
           {/* Fucet timer */}
 
-          <div className='p-10 text-center flex items-center flex-col gap-4'>
+          <div className="p-10 text-center flex items-center flex-col gap-4">
+            <h2 className="text-2xl font-bold">ProPhaze Token Faucet</h2>
+            <p className="text-2xl">Time left: {formatTime(timeLeft)}</p>
 
-            <h2 className='text-2xl font-bold'>ProPhaze Token Faucet</h2>
-            <p className='text-2xl'>Time left: {formatTime(timeLeft)}</p>
+            <p>Current Reward: {reward} tokens</p>
+            <p>
+              Laps: {laps} / {maxLaps}
+            </p>
 
-            <p  >Current Reward: {reward} tokens</p>
-            <p>Laps: {laps} / {maxLaps}</p>
-
-            <button onClick={handleWithdraw} className="bg-[#111] p-2 rounded-lg font-bold">Withdraw Tokens</button>
+            <button
+              onClick={handleWithdraw}
+              className="bg-[#111] p-2 rounded-lg font-bold"
+            >
+              Withdraw Tokens
+            </button>
           </div>
-        
-
-
         </div>
-
-
-
       </article>
 
+      <div className="flex items-center flex-col p-4 bg-[#333] rounded-lg">
+        <h2 className="mb-4 font-bold uppercase">approve prophaze token handler</h2>
+        <form onSubmit={handleDeposit}>
+          <div className="flex items-center mb-4">
+            <label className="mr-2">
+              <input
+                type="checkbox"
+                name="userAddress"
+                className="mr-1"
+                id="userAddress"
+                value="user"
+              />
+              Use User
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                name="contractAddress"
+                className="mr-1"
+                id="contractAddress"
+                value="contract"
+              />
+              Use Address
+            </label>
+          </div>
+
+          <input
+            type="amount"
+            placeholder="enter amount"
+            className="p-2 text-black rounded-lg"
+            id="depositAmount"
+            name="depositAmount"
+          />
+          <button className="p-2 bg-[#222] rounded-lg ml-2 hover:bg-[#444]">
+            deposit
+          </button>
+        </form>
+      </div>
     </main>
   );
 }
